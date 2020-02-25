@@ -1,9 +1,14 @@
-var http = require('http');
+const http = require("http");
+const hostname = '10.199.14.46';
+const port = 8029;
 
-var server = http.createServer(function (req, res) {
-    res.end("Hafidz Firman A");
+const server = http.createServer((req, res) => {
+
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hafidz Firman Asqalany\n');
 });
 
-server.listen(8029);
-
-console.log("server running on http://localhost:8029");
+server.listen(port, hostname, () => {
+    console.log('Server running at http://${hostname}:${port}/');
+});
