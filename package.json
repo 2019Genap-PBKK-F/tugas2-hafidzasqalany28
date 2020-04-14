@@ -1,5 +1,5 @@
 {
-  "name": "tugas2-hendraramadani",
+  "name": "tugas2-hafidzasqalany28",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/2019Genap-PBKK-F/tugas2-hendraramadani.git"
+    "url": "git+https://github.com/2019Genap-PBKK-F/tugas2-hafidzasqalany28.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/2019Genap-PBKK-F/tugas2-hendraramadani/issues"
+    "url": "https://github.com/2019Genap-PBKK-F/tugas2-hafidzasqalany28/issues"
   },
-  "homepage": "https://github.com/2019Genap-PBKK-F/tugas2-hendraramadani#readme",
+  "homepage": "https://github.com/2019Genap-PBKK-F/tugas2-hafidzasqalany28#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
