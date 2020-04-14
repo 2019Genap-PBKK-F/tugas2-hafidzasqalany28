@@ -5,7 +5,7 @@ var sql = require("mssql");
 var cors = require("cors");
 var app = express(); 
 // Body Parser Middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 //Enabling CORS  
 app.use(cors());
 app.use(function (req, res, next) {
@@ -60,7 +60,7 @@ app.put('/api/kategoriunit/:id',function(req,res){
     execute.execqr(res, query, param);
 })
 
-// DATA DASAR //
+//DATA DASAR //
 
 //select
 app.get("/api/datadasar", function (req, res) {
@@ -97,7 +97,6 @@ app.put('/api/datadasar/:id',function(req,res){
     execute.execqr(res, query, param);
 })
 
-
 // UNIT //
 
 //select
@@ -106,6 +105,12 @@ app.get("/api/unit", function (req, res) {
    console.log('select unit');
    execute.execqr(res, query, null);
 });
+
+app.get("/api/namakategori", function(req, res)
+{
+  var query = "select id, nama as name from kategoriunit";
+  execute.execqr(res, query, null);
+})
 
 //delete
 app.delete('/api/unit/:id', function (req, res) {
@@ -142,41 +147,55 @@ app.put('/api/unit/:id',function(req,res){
 app.get("/api/capaian_unit", function (req, res) {
    var query = "SELECT * FROM [capaian_unit]";
    console.log('select capaian_unit');
-   execute.execqr(res, query, null);
+   execute.execqr(res, query, null,0);
 });
 
-//delete
-app.delete('/api/capaian_unit/:datadasar', function (req, res) {
-   var param = [
-      { name: 'datadasar_id', sqltype: sql.Int, value: req.params.datadasar_id },
-      { name: 'unit_id', sqltype: sql.Int, value: req.params.unit_id },
-      { name: 'waktu', sqltype: sql.DateTime, value: req.params.waktu }
-    ]
-   var query = "DELETE FROM [capaian_unit] WHERE datadasar_id=@datadasar_id AND unit_id=@unit_id;"
-   console.log();
-   execute.execqr(res, query, param);
+app.get("/api/datadasar/nama", function(req, res)
+{
+  var query = 'select id,nama as name from DataDasar'
+  execute.execqr(res, query, null, 0);
 })
 
-//insert
-app.post('/api/capaian_unit',function(req,res){
-    var query = "INSERT INTO [capaian_unit] (datadasar_id, unit_id, waktu, capaian) VALUES ('1', '1', CURRENT_TIMESTAMP, '');"
-    console.log('insert capaian_unit');
-    execute.execqr(res, query,null);
+app.get("/api/namaunit", function(req, res)
+{
+  var query = "select id, nama as name from Unit";
+  execute.execqr(res, query, null);
+})
+
+//delete
+app.delete("/api/capaian_unit/:DataDasar_id&:Unit_id&:waktu", function(req, res)
+{
+  var quote = String.fromCharCode(39);
+  var query = "delete from Capaian_Unit where DataDasar_id=" + req.params.DataDasar_id + 'and Unit_id =' + req.params.Unit_id + 'and waktu =' + quote + req.params.waktu + quote;
+  execute.execqr(res, query, null);
+  console.log( req.params.waktu)
+})
+
+app.post("/api/capaian_unit/", function(req, res)
+{
+  var param = [
+    { name: 'DataDasar_id', sqltype: sql.Int, value: req.body.DataDasar_id },
+    { name: 'Unit_id', sqltype: sql.Int, value: req.body.Unit_id },
+    { name: 'capaian', sqltype: sql.Float, value: req.body.capaian }
+  ]
+
+  var query = 'insert into Capaian_Unit values( @DataDasar_id, @Unit_id, CURRENT_TIMESTAMP, @capaian )';
+  execute.execqr(res, query, param)
 })
 
 //update
-app.put('/api/capaian_unit/:datadasar_id',function(req,res){
+app.put("/api/capaian_unit/:DataDasar_id&:Unit_id&:waktu", function(req, res) {
+   var quote = String.fromCharCode(39);
    var param = [
-      { name: 'datadasar_id', sqltype: sql.Int, value: req.params.datadasar_id },
-      { name: 'unit_id', sqltype: sql.Int, value: req.params.unit_id },
-      { name: 'waktu', sqltype: sql.DateTime, value: req.params.waktu },
-      { name: 'capaian', sqltype: sql.Float, value: req.params.capaian }
-    ]
-    var query = "UPDATE [capaian_unit] SET datadasar_id = @datadasar_id, unit_id = @unit_id, waktu = CURRENT_TIMESTAMP, capaian=@capaian WHERE datadasar_id=@datadasar_id AND unit_id=@unit_id AND waktu=@waktu;"
-    console.log('update capaian_unit');
-    execute.execqr(res, query, param);
-})
-
+     { name: 'DataDasar_id_new', sqltype: sql.Int, value: req.body.DataDasar_id },
+     { name: 'Unit_id_new', sqltype: sql.Int, value: req.body.Unit_id },
+     { name: 'waktu', sqltype: sql.DateTime, value: req.body.waktu },
+     { name: 'capaian', sqltype: sql.Float, value: req.body.capaian }
+   ]
+ 
+   var query = 'update Capaian_Unit set DataDasar_id = @DataDasar_id_new, Unit_id = @Unit_id_new, waktu = CURRENT_TIMESTAMP, capaian = @capaian where DataDasar_id = ' + req.params.DataDasar_id + ' and Unit_id =' + req.params.Unit_id + 'and waktu =' + quote + req.params.waktu + quote;
+   execute.execqr(res, query, param)
+ })
 
 app.listen(8029, function () {
    console.log('Listen on port 8029')
