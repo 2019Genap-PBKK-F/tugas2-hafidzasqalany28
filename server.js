@@ -288,7 +288,7 @@ app.post('/api/masterindikator',function(req,res){
 app.put('/api/masterindikator/:id',function(req,res){
    var param = [
       { name: 'id', sqltype: sql.Int, value: req.params.id },
-      { name: 'id_aspek', sqltype: sql.Int, value: req.body.id_penyebut },
+      { name: 'id_aspek', sqltype: sql.Int, value: req.body.id_aspek },
       { name: 'id_penyebut', sqltype: sql.Int, value: req.body.id_penyebut },
       { name: 'id_pembilang', sqltype: sql.Int, value: req.body.id_pembilang },
       { name: 'nama', sqltype: sql.VarChar, value: req.body.nama },
