@@ -23,8 +23,7 @@ app.get("/", function (req, res) {
 });
 
 
-//////////////////////////// KATEGORI UNIT ///////////////////////////////////////////
-
+// Jenis Satker //
 //select
 app.get("/api/jenissatker", function (req, res) {
    var query = "SELECT * FROM [jenissatker]";
@@ -61,9 +60,7 @@ app.put('/api/jenissatker/:id',function(req,res){
     execute.execqr(res, query, param);
 })
 
-////////////////////////////////////////////////////////////////////////////
-//////////////////////////// DATA DASAR ////////////////////////////////////
-
+// DATA DASAR //
 //select
 app.get("/api/datadasar", function (req, res) {
    var query = "SELECT * FROM [datadasar]";
@@ -100,8 +97,7 @@ app.put('/api/datadasar/:id',function(req,res){
     execute.execqr(res, query, param);
 })
 
-////////////////////////////////////////////////////////////////////////////
-//////////////////////////// satuan kerja /////////////////////////////////////////
+// satuan kerja //
 
 //select
 app.get("/api/satuankerja", function (req, res) {
@@ -148,8 +144,7 @@ app.put('/api/satuankerja/:id',function(req,res){
     execute.execqr(res, query, param);
 })
 
-////////////////////////////////////////////////////////////////////////////
-//////////////////////////// CAPAIAN UNIT //////////////////////////////////
+// CAPAIAN UNIT //
 //select
 app.get("/api/capaian_unit", function (req, res) {
    var query = "SELECT * FROM [capaian_unit]";
@@ -204,8 +199,7 @@ app.put("/api/capaian_unit/:id_satker&:id_datadasar&:waktu", function(req, res) 
    execute.execqr(res, query, param)
  })
 
-////////////////////////////////////////////////////////////////////////////
-///////////////////////////////Periode/////////////////////////////////////
+// Periode //
 
 //select
 app.get("/api/periode", function (req, res) {
@@ -241,7 +235,7 @@ app.post('/api/periode',function(req,res){
     execute.execqr(res, query, param);
 })
 
-//updatedd
+//update
 app.put('/api/periode/:id',function(req,res){
    var param = [
       { name: 'id', sqltype: sql.VarChar, value: req.body.id },
@@ -252,12 +246,17 @@ app.put('/api/periode/:id',function(req,res){
     execute.execqr(res, query, param);
 })
 
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////// Master Indikator ///////////////////////////
+// Master Indikator //
 
 //select
 app.get("/api/masterindikator", function (req, res) {
    var query = "SELECT * FROM [masterindikator]";
+   console.log('select masterindikator');
+   execute.execqr(res, query, null);
+});
+
+app.get("/api/aaspek", function (req, res) {
+   var query = "SELECT id,nama as name FROM [aspek]";
    console.log('select masterindikator');
    execute.execqr(res, query, null);
 });
@@ -280,7 +279,7 @@ app.delete('/api/masterindikator/:id', function (req, res) {
 
 //insert
 app.post('/api/masterindikator',function(req,res){
-    var query = "INSERT INTO [masterindikator] (id_penyebut, id_pembilang, nama, deskripsi, default_bobot, create_date, last_update, expired_date) VALUES ('', '', '', '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '');"
+    var query = "INSERT INTO [masterindikator] (id_aspek, id_penyebut, id_pembilang, nama, deskripsi, default_bobot, create_date, last_update, expired_date) VALUES ('', '', '', '', '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '');"
     console.log('insert masterindikator');
     execute.execqr(res, query, null);
 })
@@ -289,6 +288,7 @@ app.post('/api/masterindikator',function(req,res){
 app.put('/api/masterindikator/:id',function(req,res){
    var param = [
       { name: 'id', sqltype: sql.Int, value: req.params.id },
+      { name: 'id_aspek', sqltype: sql.Int, value: req.body.id_penyebut },
       { name: 'id_penyebut', sqltype: sql.Int, value: req.body.id_penyebut },
       { name: 'id_pembilang', sqltype: sql.Int, value: req.body.id_pembilang },
       { name: 'nama', sqltype: sql.VarChar, value: req.body.nama },
@@ -296,13 +296,12 @@ app.put('/api/masterindikator/:id',function(req,res){
       { name: 'default_bobot', sqltype: sql.Float, value: req.body.default_bobot },
       { name: 'expired_date', sqltype: sql.VarChar, value: req.body.expired_date }
     ]
-    var query = "UPDATE [masterindikator] SET id_penyebut = @id_penyebut, id_pembilang = @id_pembilang, nama = @nama, deskripsi = @deskripsi, default_bobot = @default_bobot, last_update = CURRENT_TIMESTAMP, expired_date = @expired_date WHERE id = @id;"
+    var query = "UPDATE [masterindikator] SET id_aspek = @id_aspek, id_penyebut = @id_penyebut, id_pembilang = @id_pembilang, nama = @nama, deskripsi = @deskripsi, default_bobot = @default_bobot, last_update = CURRENT_TIMESTAMP, expired_date = @expired_date WHERE id = @id;"
     console.log('update masterindikator');
     execute.execqr(res, query, param);
 })
 
-////////////////////////////////////////////////////////////////////////////
-//////////////////////////// Indikator Periode ////////////////////////////
+// Indikator Periode //
 
 //select
 app.get("/api/indikatorperiode", function (req, res) {
@@ -349,8 +348,7 @@ app.put('/api/indikatorperiode/:id_master&:id_periode&:bobot',function(req,res){
     execute.execqr(res, query, param);
 })
 
-////////////////////////////////////////////////////////////////////////////
-//////////////////////////// Indikator Satuan Kerja ////////////////////////////
+// Indikator Satuan Kerja //
 
 //select
 app.get("/api/indikatorsatuankerja", function (req, res) {
@@ -409,8 +407,7 @@ app.put('/api/indikatorsatuankerja/:id_periode&:id_master&:last_update',function
     execute.execqr(res, query, param);
 })
 
-////////////////////////////////////////////////////////////////////////////
-/////////////////////////INDIKATOR SATUAN KERJA LOG ////////////////////////
+// INDIKATOR SATUAN KERJA LOG //
 //select
 app.get("/api/indikatorsatuankerjalog", function (req, res) {
    var query = "SELECT * FROM [indikator_satuankerja_log]";
@@ -433,7 +430,44 @@ app.delete('/api/indikatorsatuankerjalog/:create_date', function (req, res) {
    execute.execqr(res, query, null);
 })
 
-/////////////////////////////////////////////////////////////////////////////
+// Aspek //
+//select
+app.get("/api/aspek", function (req, res) {
+   var query = "SELECT * FROM [aspek]";
+   console.log('select aspek');
+   execute.execqr(res, query, null);
+});
+
+//delete
+app.delete('/api/aspek/:id', function (req, res) {
+   var param = [
+      { name: 'id', sqltype: sql.Int, value: req.params.id }
+    ]
+   var query = "DELETE FROM [aspek] WHERE id=@id";
+   console.log('delete aspek');
+   execute.execqr(res, query, param);
+})
+
+//insert
+app.post('/api/aspek',function(req,res){
+    var query = "INSERT INTO [aspek] (aspek,komponen_aspek) VALUES ('','');"
+    console.log('insert aspek');
+    execute.execqr(res, query, null);
+})
+
+//update
+app.put('/api/aspek/:id',function(req,res){
+   var param = [
+      { name: 'id', sqltype: sql.Int, value: req.params.id },
+      { name: 'aspek', sqltype: sql.VarChar, value: req.body.aspek },
+      { name: 'komponen_aspek', sqltype: sql.VarChar, value: req.body.komponen_aspek }
+    ]
+    var query = "UPDATE [aspek] SET aspek = @aspek, komponen_aspek = @komponen_aspek WHERE id = @id;"
+    console.log('update aspek');
+    execute.execqr(res, query, param);
+})
+
+
 app.listen(8029, function () {
    console.log('Listen on port 8029')
 })
