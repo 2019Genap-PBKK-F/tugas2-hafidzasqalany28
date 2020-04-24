@@ -256,7 +256,7 @@ app.get("/api/masterindikator", function (req, res) {
 });
 
 app.get("/api/aaspek", function (req, res) {
-   var query = "SELECT id,nama as name FROM [aspek]";
+   var query = "SELECT id,aspek as name FROM [aspek]";
    console.log('select masterindikator');
    execute.execqr(res, query, null);
 });
