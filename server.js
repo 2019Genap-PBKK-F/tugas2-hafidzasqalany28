@@ -124,7 +124,7 @@ app.delete('/api/satuankerja/:id', function (req, res) {
 
 //insert
 app.post('/api/satuankerja',function(req,res){
-    var query = "INSERT INTO [satuankerja] (id_jns_satker, id_induk_satker,nama,email,create_date,last_update,expired_date) VALUES ('', '','','',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'')";
+    var query = "INSERT INTO [satuankerja] (id_satker,id_jns_satker, id_induk_satker,nama,level_unit,email,create_date,last_update,expired_date) VALUES ('','', '','','','',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'')";
     console.log('insert satuankerja');
     execute.execqr(res, query, null);
 })
@@ -133,18 +133,21 @@ app.post('/api/satuankerja',function(req,res){
 app.put('/api/satuankerja/:id',function(req,res){
    var param = [
       { name: 'id', sqltype: sql.Int, value: req.params.id },
-      { name: 'id_jns_satker', sqltype: sql.VarChar, value: req.body.id_jns_satker },
+      { name: 'id_satker', sqltype: sql.VarChar, value: req.body.id_satker },
+      { name: 'id_jns_satker', sqltype: sql.Int, value: req.body.id_jns_satker },
       { name: 'id_induk_satker', sqltype: sql.VarChar, value: req.body.id_induk_satker },
       { name: 'nama', sqltype: sql.VarChar, value: req.body.nama },
       { name: 'email', sqltype: sql.VarChar, value: req.body.email },
+      { name: 'level_unit', sqltype: sql.VarChar, value: req.body.level_unit },
       { name: 'expired_date', sqltype: sql.VarChar, value: req.body.expired_date }
     ]
-    var query = "UPDATE [satuankerja] SET id_jns_satker=@id_jns_satker, id_induk_satker=@id_induk_satker, nama=@nama,email=@email,last_update=CURRENT_TIMESTAMP,expired_date=@expired_date WHERE id = @id;"
+    var query = "UPDATE [satuankerja] SET id_satker=@id_satker,id_jns_satker=@id_jns_satker, id_induk_satker=@id_induk_satker, nama=@nama,email=@email,level_unit=@level_unit,last_update=CURRENT_TIMESTAMP,expired_date=@expired_date WHERE id = @id;"
     console.log('update satuankerja');
     execute.execqr(res, query, param);
 })
 
 // CAPAIAN UNIT //
+
 //select
 app.get("/api/capaian_unit", function (req, res) {
    var query = "SELECT * FROM [capaian_unit]";
@@ -235,7 +238,7 @@ app.post('/api/periode',function(req,res){
     execute.execqr(res, query, param);
 })
 
-//update
+//updatedd
 app.put('/api/periode/:id',function(req,res){
    var param = [
       { name: 'id', sqltype: sql.VarChar, value: req.body.id },
@@ -415,6 +418,7 @@ app.put('/api/indikatorsatuankerja/:id_periode&:id_master&:last_update',function
 })
 
 // INDIKATOR SATUAN KERJA LOG //
+
 //select
 app.get("/api/indikatorsatuankerjalog", function (req, res) {
    var query = "SELECT * FROM [indikator_satuankerja_log]";
@@ -438,6 +442,7 @@ app.delete('/api/indikatorsatuankerjalog/:create_date', function (req, res) {
 })
 
 // Aspek //
+
 //select
 app.get("/api/aspek", function (req, res) {
    var query = "SELECT * FROM [aspek]";
