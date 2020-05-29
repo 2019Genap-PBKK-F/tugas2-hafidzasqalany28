@@ -517,10 +517,27 @@ app.get("/api/publikasi", function (req, res) {
 
 //kontrakkerja
 app.get("/api/konkin/:id", function (req, res) {
-   var query = "select i.id_satker , m.id_aspek, m.komponen_aspek, m.nama, i.bobot, i.target, i.capaian  from indikator_satuankerja as i, masterindikator as m where i.id_master=m.id AND i.id_satker="+req.params.id;
-   console.log('select konkin');
+   var query = "select i.id_satker , m.id_aspek, m.komponen_aspek, m.nama, i.bobot, i.target, i.capaian, (CASE WHEN i.capaian>= i.target THEN FORMAT(1, 'P') WHEN i.target > 0 THEN FORMAT(i.capaian/(i.target), 'P') else FORMAT(i.target , 'P') end ) as Persentase from indikator_satuankerja as i, masterindikator as m where i.id_master=m.id AND i.id_satker="+req.params.id;
+   console.log('select kontrak kinerja');
    execute.execqr(res, query, null);
 });
+
+app.get('/api/kkontrakkinerja/:id', function(req,res){  
+   var param = [
+     { name: 'id_satker', sqltype: sql.VarChar, value: req.params.id}
+   ]
+   var query = "select id, id_satker, nama from satuankerja where (id_satker = @id_satker or id_induk_satker = @id_satker) and (nama like 'Departemen%' or nama like 'Fakultas%') order by id";
+   execute.execqr(res, query, param);
+ });
+
+ app.post("/auth/login/", function(req, res){
+   var param = [
+     { name: 'email', sqltype: sql.VarChar, value: req.body.username},
+     { name: 'password', sqltype: sql.VarChar, value: req.body.password}
+   ]
+   var query = "select id_satker, nama from satuankerja where email = @email and @email = @password";
+   execute.execqr(res, query, param);
+ });
 
 app.listen(8029, function () {
    console.log('Listen on port 8029')
